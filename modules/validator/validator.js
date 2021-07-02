@@ -1,7 +1,13 @@
 const Types = require('./types');
 
 class Validator {
-  static validate(requestBody, validatorInput) {
+  #creditCardRepository;
+
+  constructor(creditCardRepository) {
+    this.#creditCardRepository = creditCardRepository;
+  }
+
+  validate(requestBody, validatorInput) {
     this.checkAllKeys(validatorInput);
 
     const message = {};
@@ -42,18 +48,42 @@ class Validator {
   static check(type, value) {
     switch (type) {
       case Types.CARD_NUMBER:
-        return true;
+        return this.#validateCardNumber(value);
       case Types.CARD_DATE:
-        return true;
+        return this.#validateCardDate(value);
       case Types.CVV2:
-        return true;
+        return this.#validateCVV2(value);
       case Types.EMAIL:
-        return true;
+        return this.#validateEmail(value);
       case Types.MOBILE_NUMBER:
-        return true;
+        return this.#validateMobileNumber(value);
       default:
         throw new Error(`Invalid key ${type} provided to validator`);
     }
+  }
+
+  #validateCardNumber(value) {
+    return this.#creditCardRepository.validateCreditCardNumber(value);
+  }
+
+  #validateCardDate(value) {
+    const regEx = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+    return regEx.test(value);
+  }
+
+  #validateCVV2(value) {
+    const regEx = /^([0-9]{3})$/;
+    return regEx.test(value);
+  }
+
+  #validateEmail(value) {
+    const regEx = /\S+@\S+\.\S+/;
+    return regEx.test(value);
+  }
+
+  #validateMobileNumber(value) {
+    const regEx = /^[0]\d{10}$/;
+    return regEx.test(value);
   }
 }
 

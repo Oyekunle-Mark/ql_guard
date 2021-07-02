@@ -1,5 +1,5 @@
 class CreditCardRepository {
-  validateCreditCardNumber(cardNumber) {
+  static validateCreditCardNumber(cardNumber) {
     const numberLength = cardNumber.length;
     let sum = 0;
     let isEven = false;
