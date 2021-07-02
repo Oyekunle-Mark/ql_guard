@@ -1,0 +1,25 @@
+{
+  "name": "ql_guard",
+  "version": "1.0.0",
+  "description": "Validation API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oyekunle-Mark/ql_guard.git"
+  },
+  "keywords": [
+    "validate",
+    "credit",
+    "card",
+    "luhn"
+  ],
+  "author": "Oyekunle-Mark",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Oyekunle-Mark/ql_guard/issues"
+  },
+  "homepage": "https://github.com/Oyekunle-Mark/ql_guard#readme"
+}
