@@ -20,3 +20,5 @@ class CreditCardRepository {
     return sum % 10 === 0;
   }
 }
+
+module.exports = CreditCardRepository;

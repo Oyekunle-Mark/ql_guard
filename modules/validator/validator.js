@@ -5,7 +5,7 @@ class Validator {
     this.checkAllKeys(validatorInput);
 
     const message = {};
-    const valid = true;
+    let valid = true;
 
     Object.keys(validatorInput).forEach((key) => {
       const keyInput = requestBody[key];
@@ -31,9 +31,11 @@ class Validator {
   }
 
   static checkAllKeys(input) {
-    Object.values(input).forEach((key) => {
-      if (!Types.hasOwnProperty(key))
-        throw new Error(`Invalid key ${key} provided to validator`);
+    Object.values(input).forEach((value) => {
+      if (!Object.values(Types).includes(value))
+        throw new Error(
+          `Invalid validator field value ${values} provided to validator`,
+        );
     });
   }
 
