@@ -22,13 +22,12 @@ class Validator {
         valid = false;
         errors[key] = `${key} is required`;
       } else {
-        const isValid = this.check(validatorInput[key], keyInput);
-
-        valid = isValid;
-        !isValid &&
-          (errors[
+        if (!this.check(validatorInput[key], keyInput)) {
+          valid = false;
+          errors[
             key
-          ] = `${key} provided is an invalid ${validatorInput[key]} type`);
+          ] = `${key} provided is an invalid ${validatorInput[key]} type`;
+        }
       }
     });
 
