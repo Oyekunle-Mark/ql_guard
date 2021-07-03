@@ -13,6 +13,7 @@ class Validator {
     this.checkAllKeys(validatorInput);
 
     const errors = {};
+    const additionErrors = {};
     let valid = true;
 
     Object.keys(validatorInput).forEach((key) => {
@@ -22,7 +23,7 @@ class Validator {
         valid = false;
         errors[key] = `${key} is required`;
       } else {
-        if (!this.check(validatorInput[key], keyInput)) {
+        if (!this.check(validatorInput[key], keyInput, additionErrors)) {
           valid = false;
           errors[
             key
@@ -31,9 +32,14 @@ class Validator {
       }
     });
 
+    if (Object.keys(additionErrors).length) valid = false;
+
     return {
       valid,
-      errors,
+      errors: {
+        ...errors,
+        ...additionErrors,
+      },
     };
   }
 
@@ -46,12 +52,12 @@ class Validator {
     });
   }
 
-  check(type, value) {
+  check(type, value, additionErrors = {}) {
     switch (type) {
       case Types.CARD_NUMBER:
         return this.__validateCardNumber(value);
       case Types.CARD_DATE:
-        return this.#validateCardDate(value);
+        return this.#validateCardDate(value, additionErrors);
       case Types.CVV2:
         return this.#validateCVV2(value);
       case Types.EMAIL:
@@ -70,9 +76,24 @@ class Validator {
     );
   }
 
-  #validateCardDate(value) {
+  #validateCardDate(value, additionErrors) {
     const regEx = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
-    return regEx.test(value);
+    const isValid = regEx.test(value);
+
+    if (isValid) {
+      const [month, year] = value.split('/');
+
+      const currentTwoDigitYear = new Date().getFullYear() % 100;
+      const currentMonth = new Date().getMonth();
+
+      const dateExpired =
+        currentTwoDigitYear > Number(year) ||
+        (currentTwoDigitYear === Number(year) && currentMonth > month);
+
+      if (dateExpired) additionErrors[Types.MOBILE_NUMBER] = 'Card has expired';
+    }
+
+    return isValid;
   }
 
   #validateCVV2(value) {
