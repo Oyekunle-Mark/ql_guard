@@ -1,8 +1,6 @@
+const Config = require('./modules/config');
 const Server = require('./src/http/setUpServer');
 
-const host = 'localhost';
-const port = 8000;
-
-const server = new Server(host, port);
+const server = new Server(Config.get('HOST'), Config.get('PORT'));
 
 server.build().serve();
