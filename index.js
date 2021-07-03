@@ -1,10 +1,6 @@
-const http = require('http');
-const { CreditCardController } = require('./src/http/controllers');
+const Config = require('./modules/config');
+const Server = require('./src/http/setUpServer');
 
-const host = 'localhost';
-const port = 8000;
+const server = new Server(Config.get('HOST'), Config.get('PORT'));
 
-const server = http.createServer(CreditCardController.validate);
-server.listen(port, host, () => {
-  console.log(`Server is running on http://${host}:${port}`);
-});
+server.build().serve();

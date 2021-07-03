@@ -1,25 +1,15 @@
-const { Types, Validator } = require('../../../modules/validator');
+const { Types } = require('../../../modules/validator');
 
 class CreditCardController {
-  static validate(req, res) {
-    const type = req.headers['content-type'];
-    const acceptedTypes = new Set(['application/json', 'application/xml']);
+  #validator;
 
-    if (!acceptedTypes.has(type)) {
-      console.log(req.headers);
-      res.setHeader('Content-Type', 'application/json');
-      res.writeHead(422);
-      res.end(`{"error": "Invalid format provided"}`);
-      return;
-    }
+  constructor(validator) {
+    this.#validator = validator;
 
-    if (req.method !== 'POST') {
-      res.setHeader('Content-Type', 'application/json');
-      res.writeHead(404);
-      res.end(`{"error": "Not found"}`);
-      return;
-    }
+    this.validate = this.validate.bind(this);
+  }
 
+  validate(req, res) {
     let data = '';
 
     req.on('data', (chunk) => {
@@ -38,13 +28,18 @@ class CreditCardController {
         return;
       }
 
-      const result = Validator.validate(reqBody, {
-        card_number_input: Types.CARD_NUMBER,
+      const result = this.#validator.validate(reqBody, {
+        card_number: Types.CARD_NUMBER,
+        date: Types.CARD_DATE,
+        cvv2: Types.CVV2,
+        email: Types.EMAIL,
+        mobile: Types.MOBILE_NUMBER,
       });
 
       res.setHeader('Content-Type', 'application/json');
       res.writeHead(200);
       res.end(JSON.stringify(result));
+      return
     });
   }
 }
