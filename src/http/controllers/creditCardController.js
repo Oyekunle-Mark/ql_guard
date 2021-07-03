@@ -1,7 +1,15 @@
-const { Types, Validator } = require('../../../modules/validator');
+const { Types } = require('../../../modules/validator');
 
 class CreditCardController {
-  static validate(req, res) {
+  #validator;
+
+  constructor(validator) {
+    this.#validator = validator;
+
+    this.validate = this.validate.bind(this);
+  }
+
+  validate(req, res) {
     const type = req.headers['content-type'];
     const acceptedTypes = new Set(['application/json', 'application/xml']);
 
@@ -10,13 +18,6 @@ class CreditCardController {
       res.setHeader('Content-Type', 'application/json');
       res.writeHead(422);
       res.end(`{"error": "Invalid format provided"}`);
-      return;
-    }
-
-    if (req.method !== 'POST') {
-      res.setHeader('Content-Type', 'application/json');
-      res.writeHead(404);
-      res.end(`{"error": "Not found"}`);
       return;
     }
 
@@ -38,7 +39,7 @@ class CreditCardController {
         return;
       }
 
-      const result = Validator.validate(reqBody, {
+      const result = this.#validator.validate(reqBody, {
         card_number_input: Types.CARD_NUMBER,
       });
 

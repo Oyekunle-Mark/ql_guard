@@ -5,6 +5,10 @@ class Validator {
 
   constructor(creditCardRepository) {
     this.#creditCardRepository = creditCardRepository;
+
+    this.validate = this.validate.bind(this);
+    // this.check = this.check.bind(this);
+    // this.__validateCardNumber = this.__validateCardNumber.bind(this);
   }
 
   validate(requestBody, validatorInput) {
@@ -36,7 +40,7 @@ class Validator {
     };
   }
 
-  static checkAllKeys(input) {
+  checkAllKeys(input) {
     Object.values(input).forEach((value) => {
       if (!Object.values(Types).includes(value))
         throw new Error(
@@ -45,10 +49,10 @@ class Validator {
     });
   }
 
-  static check(type, value) {
+  check(type, value) {
     switch (type) {
       case Types.CARD_NUMBER:
-        return this.#validateCardNumber(value);
+        return this.__validateCardNumber(value);
       case Types.CARD_DATE:
         return this.#validateCardDate(value);
       case Types.CVV2:
@@ -62,7 +66,7 @@ class Validator {
     }
   }
 
-  #validateCardNumber(value) {
+  __validateCardNumber(value) {
     return this.#creditCardRepository.validateCreditCardNumber(value);
   }
 

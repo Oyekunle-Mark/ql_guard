@@ -5,7 +5,7 @@ class CreditCardRepository {
     let isEven = false;
 
     for (let i = numberLength - 1; i >= 0; i--) {
-      let currentNumber = parseInt(value.charAt(i), 10);
+      let currentNumber = parseInt(cardNumber.charAt(i), 10);
 
       if (isEven) {
         currentNumber *= 2;
