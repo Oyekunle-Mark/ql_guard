@@ -20,6 +20,7 @@ class CreditCardController {
 
     req.on('end', () => {
       let reqBody;
+
       const validatorExpects = {
         card_number: Types.CARD_NUMBER,
         date: Types.CARD_DATE,
