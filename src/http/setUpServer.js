@@ -1,6 +1,7 @@
 const http = require('http');
 const { CreditCardController, CommonController } = require('./controllers');
 const { CreditCardRepository } = require('./repositories');
+const Middlewares = require('./middlewares');
 const { Validator } = require('../../modules/validator');
 const Router = require('../../modules/router');
 
@@ -21,6 +22,7 @@ class Server {
     const router = new Router();
     router.register('/', creditCardController.validate);
     router.registerNotFoundHandler(CommonController.notFound);
+    router.addMiddleware(Middlewares.enforceRequestBodyType);
 
     this.#server = http.createServer(router.findControllerAndServe);
 

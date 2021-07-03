@@ -24,18 +24,24 @@ class Router {
     this.#middlewares.push(middleware);
   }
 
-  #executeMiddlewares(req, res) {
-    this.#middlewares.forEach(middleware => {
-      middleware(req, res);
-    })
+  #executeMiddlewares(req, res, shouldTerminate) {
+    this.#middlewares.forEach((middleware) => {
+      middleware(req, res, shouldTerminate);
+    });
   }
 
   findControllerAndServe(req, res) {
+    const shouldTerminate = { terminate: false };
+
+    this.#executeMiddlewares(req, res, shouldTerminate);
+
+    if (shouldTerminate.terminate) return;
+
     const pathname = url.parse(req.url).pathname;
     const controller = this.#paths.get(pathname);
 
     if (!controller || req.method !== 'POST') {
-      if (!this.notFoundHandler) {
+      if (!this.#notFoundHandler) {
         throw new Error('Not found handler not registered');
       }
 

@@ -10,17 +10,6 @@ class CreditCardController {
   }
 
   validate(req, res) {
-    const type = req.headers['content-type'];
-    const acceptedTypes = new Set(['application/json', 'application/xml']);
-
-    if (!acceptedTypes.has(type)) {
-      console.log(req.headers);
-      res.setHeader('Content-Type', 'application/json');
-      res.writeHead(422);
-      res.end(`{"error": "Invalid format provided"}`);
-      return;
-    }
-
     let data = '';
 
     req.on('data', (chunk) => {
@@ -50,6 +39,7 @@ class CreditCardController {
       res.setHeader('Content-Type', 'application/json');
       res.writeHead(200);
       res.end(JSON.stringify(result));
+      return
     });
   }
 }
