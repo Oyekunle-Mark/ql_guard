@@ -23,10 +23,10 @@ class CreditCardController {
 
       const validatorExpects = {
         card_number: Types.CARD_NUMBER,
-        date: Types.CARD_DATE,
+        card_date: Types.CARD_DATE,
         cvv2: Types.CVV2,
         email: Types.EMAIL,
-        mobile: Types.MOBILE_NUMBER,
+        mobile_number: Types.MOBILE_NUMBER,
       };
 
       try {
