@@ -23,6 +23,7 @@ class Server {
     router.register('/', creditCardController.validate);
     router.registerNotFoundHandler(CommonController.notFound);
     router.addMiddleware(Middlewares.enforceRequestBodyType);
+    router.addMiddleware(Middlewares.validateApiKey);
 
     this.#server = http.createServer(router.findControllerAndServe);
 

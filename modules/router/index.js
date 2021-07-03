@@ -27,6 +27,8 @@ class Router {
   #executeMiddlewares(req, res, shouldTerminate) {
     this.#middlewares.forEach((middleware) => {
       middleware(req, res, shouldTerminate);
+
+      if (shouldTerminate.terminate) return;
     });
   }
 
