@@ -1,5 +1,7 @@
 class CreditCardRepository {
-  static validateCreditCardNumber(cardNumber) {
+  static luhnAlgorithm(cardNumber) {
+    cardNumber = cardNumber.replace(/[ -]/g, '');
+
     const numberLength = cardNumber.length;
     let sum = 0;
     let isEven = false;
@@ -18,6 +20,42 @@ class CreditCardRepository {
     }
 
     return sum % 10 === 0;
+  }
+
+  static validateCardNumber(cardNumber) {
+    cardNumber = cardNumber.replace(/[ -]/g, '');
+
+    return /^(?:(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$/.exec(
+      cardNumber,
+    );
+  }
+
+  static findCardType(cardNumber) {
+    cardNumber = cardNumber.replace(/[ -]/g, '');
+
+    const match =
+      /^(?:(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$/.exec(
+        cardNumber,
+      );
+
+    const types = [
+      'Visa',
+      'MasterCard',
+      'Discover',
+      'American Express',
+      'Diners Club',
+      'JCB',
+    ];
+
+    if (match) {
+      for (let i = 1; i < match.length; i++) {
+        if (match[i]) {
+          return types[i - 1];
+        }
+      }
+    } else {
+      throw new Error('Invalid card number provided');
+    }
   }
 
   static buildToObject(xmlString, validatorInput) {

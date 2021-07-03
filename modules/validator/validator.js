@@ -64,7 +64,10 @@ class Validator {
   }
 
   __validateCardNumber(value) {
-    return this.#creditCardRepository.validateCreditCardNumber(value);
+    return (
+      this.#creditCardRepository.validateCardNumber(value) &&
+      this.#creditCardRepository.luhnAlgorithm(value)
+    );
   }
 
   #validateCardDate(value) {
