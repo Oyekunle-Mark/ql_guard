@@ -40,7 +40,11 @@ class CreditCardController {
       }
 
       const result = this.#validator.validate(reqBody, {
-        card_number_input: Types.CARD_NUMBER,
+        card_number: Types.CARD_NUMBER,
+        date: Types.CARD_DATE,
+        cvv2: Types.CVV2,
+        email: Types.EMAIL,
+        mobile: Types.MOBILE_NUMBER,
       });
 
       res.setHeader('Content-Type', 'application/json');

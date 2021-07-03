@@ -7,14 +7,12 @@ class Validator {
     this.#creditCardRepository = creditCardRepository;
 
     this.validate = this.validate.bind(this);
-    // this.check = this.check.bind(this);
-    // this.__validateCardNumber = this.__validateCardNumber.bind(this);
   }
 
   validate(requestBody, validatorInput) {
     this.checkAllKeys(validatorInput);
 
-    const message = {};
+    const errors = {};
     let valid = true;
 
     Object.keys(validatorInput).forEach((key) => {
@@ -22,13 +20,13 @@ class Validator {
 
       if (!keyInput) {
         valid = false;
-        message[key] = `${key} is required`;
+        errors[key] = `${key} is required`;
       } else {
         const isValid = this.check(validatorInput[key], keyInput);
 
         valid = isValid;
         !isValid &&
-          (message[
+          (errors[
             key
           ] = `${key} provided is an invalid ${validatorInput[key]} type`);
       }
@@ -36,7 +34,7 @@ class Validator {
 
     return {
       valid,
-      message,
+      errors,
     };
   }
 
