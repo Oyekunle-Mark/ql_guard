@@ -1,5 +1,8 @@
 const url = require('url');
 
+/**
+ * The router class
+ */
 class Router {
   #paths;
   #notFoundHandler;
@@ -12,14 +15,30 @@ class Router {
     this.findControllerAndServe = this.findControllerAndServe.bind(this);
   }
 
+  /**
+   * Registers a path
+   *
+   * @param {String} path
+   * @param {Function} controller
+   */
   register(path, controller) {
     this.#paths.set(path, controller);
   }
 
+  /**
+   * Registers a 404 controller
+   *
+   * @param {Function} controller
+   */
   registerNotFoundHandler(controller) {
     this.#notFoundHandler = controller;
   }
 
+  /**
+   * Add middlewares
+   *
+   * @param {Function} middleware
+   */
   addMiddleware(middleware) {
     this.#middlewares.push(middleware);
   }
@@ -32,6 +51,13 @@ class Router {
     });
   }
 
+  /**
+   * Serves request with the appropriate registered controller
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns res
+   */
   findControllerAndServe(req, res) {
     const shouldTerminate = { terminate: false };
 

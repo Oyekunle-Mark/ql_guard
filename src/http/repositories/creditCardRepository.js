@@ -1,4 +1,13 @@
+/**
+ * Credit card repositories
+ */
 class CreditCardRepository {
+  /**
+   * Validates cardNumber using Luhn algorithm
+   *
+   * @param {string} cardNumber
+   * @returns boolean
+   */
   static luhnAlgorithm(cardNumber) {
     cardNumber = cardNumber.replace(/[ -]/g, '');
 
@@ -22,6 +31,12 @@ class CreditCardRepository {
     return sum % 10 === 0;
   }
 
+  /**
+   * Validate card number
+   *
+   * @param {string} cardNumber
+   * @returns Object
+   */
   static validateCardNumber(cardNumber) {
     cardNumber = cardNumber.replace(/[ -]/g, '');
 
@@ -30,6 +45,12 @@ class CreditCardRepository {
     );
   }
 
+  /**
+   * Finds the card number
+   *
+   * @param {string} cardNumber
+   * @returns string
+   */
   static findCardType(cardNumber) {
     cardNumber = cardNumber.replace(/[ -]/g, '');
 
@@ -58,6 +79,13 @@ class CreditCardRepository {
     }
   }
 
+  /**
+   * Adapts an XML string to a JSON object
+   *
+   * @param {string} xmlString
+   * @param {Object} validatorInput
+   * @returns Object
+   */
   static buildToObject(xmlString, validatorInput) {
     const result = {};
 
@@ -84,7 +112,7 @@ class CreditCardRepository {
     if (result.length !== 3) return null;
 
     let angledValue = result[1];
-    angledValue = angledValue.split('</')[0]
+    angledValue = angledValue.split('</')[0];
     let value = '';
 
     for (let i = 0; i < angledValue.length; i++) {

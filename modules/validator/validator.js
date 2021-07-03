@@ -1,5 +1,8 @@
 const Types = require('./types');
 
+/**
+ * Validator class
+ */
 class Validator {
   #creditCardRepository;
 
@@ -9,6 +12,13 @@ class Validator {
     this.validate = this.validate.bind(this);
   }
 
+  /**
+   * Validate requestBody against validatorInput
+   *
+   * @param {Object} requestBody
+   * @param {Object} validatorInput
+   * @returns Object
+   */
   validate(requestBody, validatorInput) {
     this.checkAllKeys(validatorInput);
 
@@ -113,12 +123,24 @@ class Validator {
     return regEx.test(value);
   }
 
+  /**
+   * Is payload XML
+   *
+   * @param {Object} req
+   * @returns boolean
+   */
   isXML(req) {
     const type = req.headers['content-type'];
 
     return type === 'application/xml';
   }
 
+  /**
+   * is input a Nigerian Phone number
+   *
+   * @param {string} value
+   * @returns
+   */
   isNigerianMobileNumber(value) {
     const nigeriaNumberRegEx = /^[0]\d{10}$/;
     return nigeriaNumberRegEx.test(value);

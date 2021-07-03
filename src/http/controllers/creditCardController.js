@@ -1,5 +1,8 @@
 const { Types } = require('../../../modules/validator');
 
+/**
+ * Credit card related controllers
+ */
 class CreditCardController {
   #creditCardRepository;
   #validator;
@@ -11,6 +14,12 @@ class CreditCardController {
     this.validate = this.validate.bind(this);
   }
 
+  /**
+   * Validate request payload
+   *
+   * @param {Object} req
+   * @param {Object} res
+   */
   validate(req, res) {
     let data = '';
 

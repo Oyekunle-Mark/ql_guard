@@ -1,3 +1,6 @@
+/**
+ * Controller class with the common controllers
+ */
 class CommonController {
   static notFound(req, res) {
     res.setHeader('Content-Type', 'application/json');
