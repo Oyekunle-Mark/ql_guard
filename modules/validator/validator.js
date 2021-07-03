@@ -1,5 +1,8 @@
 const Types = require('./types');
 
+/**
+ * Validator class
+ */
 class Validator {
   #creditCardRepository;
 
@@ -9,32 +12,46 @@ class Validator {
     this.validate = this.validate.bind(this);
   }
 
+  /**
+   * Validate requestBody against validatorInput
+   *
+   * @param {Object} requestBody
+   * @param {Object} validatorInput
+   * @returns Object
+   */
   validate(requestBody, validatorInput) {
     this.checkAllKeys(validatorInput);
 
     const errors = {};
+    const additionErrors = {};
     let valid = true;
 
     Object.keys(validatorInput).forEach((key) => {
       const keyInput = requestBody[key];
 
       if (!keyInput) {
-        valid = false;
-        errors[key] = `${key} is required`;
+        if (key !== Types.MOBILE_NUMBER) {
+          valid = false;
+          errors[key] = `${key} is required`;
+        }
       } else {
-        const isValid = this.check(validatorInput[key], keyInput);
-
-        valid = isValid;
-        !isValid &&
-          (errors[
+        if (!this.check(validatorInput[key], keyInput, additionErrors)) {
+          valid = false;
+          errors[
             key
-          ] = `${key} provided is an invalid ${validatorInput[key]} type`);
+          ] = `${key} provided is an invalid ${validatorInput[key]} type`;
+        }
       }
     });
 
+    if (Object.keys(additionErrors).length) valid = false;
+
     return {
       valid,
-      errors,
+      errors: {
+        ...errors,
+        ...additionErrors,
+      },
     };
   }
 
@@ -47,12 +64,12 @@ class Validator {
     });
   }
 
-  check(type, value) {
+  check(type, value, additionErrors = {}) {
     switch (type) {
       case Types.CARD_NUMBER:
         return this.__validateCardNumber(value);
       case Types.CARD_DATE:
-        return this.#validateCardDate(value);
+        return this.#validateCardDate(value, additionErrors);
       case Types.CVV2:
         return this.#validateCVV2(value);
       case Types.EMAIL:
@@ -65,12 +82,30 @@ class Validator {
   }
 
   __validateCardNumber(value) {
-    return this.#creditCardRepository.validateCreditCardNumber(value);
+    return (
+      this.#creditCardRepository.validateCardNumber(value) &&
+      this.#creditCardRepository.luhnAlgorithm(value)
+    );
   }
 
-  #validateCardDate(value) {
+  #validateCardDate(value, additionErrors) {
     const regEx = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
-    return regEx.test(value);
+    const isValid = regEx.test(value);
+
+    if (isValid) {
+      const [month, year] = value.split('/');
+
+      const currentTwoDigitYear = new Date().getFullYear() % 100;
+      const currentMonth = new Date().getMonth();
+
+      const dateExpired =
+        currentTwoDigitYear > Number(year) ||
+        (currentTwoDigitYear === Number(year) && currentMonth > month);
+
+      if (dateExpired) additionErrors[Types.CARD_DATE] = 'Card has expired';
+    }
+
+    return isValid;
   }
 
   #validateCVV2(value) {
@@ -84,8 +119,31 @@ class Validator {
   }
 
   #validateMobileNumber(value) {
-    const regEx = /^[0]\d{10}$/;
+    const regEx = /^\d{5,}$/;
     return regEx.test(value);
+  }
+
+  /**
+   * Is payload XML
+   *
+   * @param {Object} req
+   * @returns boolean
+   */
+  isXML(req) {
+    const type = req.headers['content-type'];
+
+    return type === 'application/xml';
+  }
+
+  /**
+   * is input a Nigerian Phone number
+   *
+   * @param {string} value
+   * @returns
+   */
+  isNigerianMobileNumber(value) {
+    const nigeriaNumberRegEx = /^[0]\d{10}$/;
+    return nigeriaNumberRegEx.test(value);
   }
 }
 

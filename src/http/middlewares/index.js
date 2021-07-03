@@ -1,6 +1,16 @@
 const Config = require('../../../modules/config');
 
+/**
+ * Middlewares
+ */
 class Middlewares {
+  /**
+   * Ensures the request content type is set to json or xml
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Object} shouldTerminate
+   */
   static enforceRequestBodyType(req, res, shouldTerminate) {
     const type = req.headers['content-type'];
     const acceptedTypes = new Set(['application/json', 'application/xml']);
@@ -16,6 +26,13 @@ class Middlewares {
     }
   }
 
+  /**
+   * Authenticate API key
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Object} shouldTerminate
+   */
   static validateApiKey(req, res, shouldTerminate) {
     const type = req.headers['api-key'];
 
