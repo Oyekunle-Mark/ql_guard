@@ -42,6 +42,23 @@ class CreditCardController {
 
       const result = this.#validator.validate(reqBody, validatorExpects);
 
+      if (result.valid) {
+        const message = {};
+        message['card_type'] = this.#creditCardRepository.findCardType(
+          reqBody.card_number,
+        );
+
+        if (reqBody.mobile_number) {
+          message['mobile_number_country'] =
+            this.#validator.isNigerianMobileNumber(reqBody.mobile_number)
+              ? 'Nigerian'
+              : 'Foreign';
+        }
+
+        result.message = message;
+        delete result.errors;
+      }
+
       res.setHeader('Content-Type', 'application/json');
       res.writeHead(200);
       res.end(JSON.stringify(result));

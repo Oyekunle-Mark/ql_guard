@@ -20,8 +20,10 @@ class Validator {
       const keyInput = requestBody[key];
 
       if (!keyInput) {
-        valid = false;
-        errors[key] = `${key} is required`;
+        if (key !== Types.MOBILE_NUMBER) {
+          valid = false;
+          errors[key] = `${key} is required`;
+        }
       } else {
         if (!this.check(validatorInput[key], keyInput, additionErrors)) {
           valid = false;
@@ -107,7 +109,7 @@ class Validator {
   }
 
   #validateMobileNumber(value) {
-    const regEx = /^[0]\d{10}$/;
+    const regEx = /^\d{5,}$/;
     return regEx.test(value);
   }
 
@@ -115,6 +117,11 @@ class Validator {
     const type = req.headers['content-type'];
 
     return type === 'application/xml';
+  }
+
+  isNigerianMobileNumber(value) {
+    const nigeriaNumberRegEx = /^[0]\d{10}$/;
+    return nigeriaNumberRegEx.test(value);
   }
 }
 
