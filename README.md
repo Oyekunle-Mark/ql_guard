@@ -18,7 +18,7 @@ The path to this endpoint is `/` and the accepted method is `POST`.
 
 ### Headers
 
-`Content-Type` can be any of `application/json` or `application/xml`. The endpoint does not support other content type.
+`Content-Type` can be any of `application/json` or `application/xml`. The endpoint does not support other content types.
 
 `Api-Key` must be the same as the key set in the `.env` file for `API_KEY`
 
