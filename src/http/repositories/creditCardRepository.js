@@ -83,11 +83,12 @@ class CreditCardRepository {
 
     if (result.length !== 3) return null;
 
-    const angledValue = result[1];
+    let angledValue = result[1];
+    angledValue = angledValue.split('</')[0]
     let value = '';
 
     for (let i = 0; i < angledValue.length; i++) {
-      if (!['<', '>', '/'].includes(angledValue.charAt(i)))
+      if (!['<', '>'].includes(angledValue.charAt(i)))
         value += angledValue.charAt(i);
     }
 

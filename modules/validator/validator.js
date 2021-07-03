@@ -92,7 +92,7 @@ class Validator {
         currentTwoDigitYear > Number(year) ||
         (currentTwoDigitYear === Number(year) && currentMonth > month);
 
-      if (dateExpired) additionErrors[Types.MOBILE_NUMBER] = 'Card has expired';
+      if (dateExpired) additionErrors[Types.CARD_DATE] = 'Card has expired';
     }
 
     return isValid;
