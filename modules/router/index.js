@@ -3,9 +3,11 @@ const url = require('url');
 class Router {
   #paths;
   #notFoundHandler;
+  #middlewares;
 
   constructor() {
     this.#paths = new Map();
+    this.#middlewares = [];
 
     this.findControllerAndServe = this.findControllerAndServe.bind(this);
   }
@@ -16,6 +18,16 @@ class Router {
 
   registerNotFoundHandler(controller) {
     this.#notFoundHandler = controller;
+  }
+
+  addMiddleware(middleware) {
+    this.#middlewares.push(middleware);
+  }
+
+  #executeMiddlewares(req, res) {
+    this.#middlewares.forEach(middleware => {
+      middleware(req, res);
+    })
   }
 
   findControllerAndServe(req, res) {
