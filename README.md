@@ -49,12 +49,9 @@ For *XML*, expected payload is:
 </cardInfo>
 ```
 
+Expected `card_date` format is `XX/XX` in the MONTH/YEAR format.
+
 In each of these payload types, `mobile_number` is optional. When provided, it's validated.
-
-#### Expected Format
-
-
-
 
 ## Author
 *Oyekunle Oloyede* 😎 🤙
