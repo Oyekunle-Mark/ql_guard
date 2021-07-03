@@ -17,7 +17,10 @@ class Server {
 
   build() {
     const validator = new Validator(CreditCardRepository);
-    const creditCardController = new CreditCardController(validator);
+    const creditCardController = new CreditCardController(
+      CreditCardRepository,
+      validator,
+    );
 
     const router = new Router();
     router.register('/', creditCardController.validate);

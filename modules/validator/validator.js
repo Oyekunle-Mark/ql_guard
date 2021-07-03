@@ -87,6 +87,12 @@ class Validator {
     const regEx = /^[0]\d{10}$/;
     return regEx.test(value);
   }
+
+  isXML(req) {
+    const type = req.headers['content-type'];
+
+    return type === 'application/xml';
+  }
 }
 
 module.exports = Validator;
